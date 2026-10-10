@@ -1,6 +1,8 @@
 package com.project.security.entity.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,6 +29,9 @@ public class User implements UserDetails {
 
     private String name;
 
+    @NotEmpty
+    @NotBlank
+    @Column(unique = true)
     private String email;
 
     private String password;
