@@ -1,6 +1,5 @@
-package com.project.security.entity.dto;
+package com.project.core.entity.dto;
 
-import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

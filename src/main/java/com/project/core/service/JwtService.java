@@ -1,8 +1,8 @@
-package com.project.security.service;
+package com.project.core.service;
 
-import com.project.security.entity.dto.CustomClaimDto;
-import com.project.security.entity.model.User;
-import com.project.security.enums.TokenType;
+import com.project.core.entity.dto.CustomClaimDto;
+import com.project.core.entity.model.User;
+import com.project.core.enums.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,29 +26,29 @@ public class JwtService {
     private String accessTokenSecretKey;
 
     @Value("${access.token.expiry}")
-    private String accessTokenExpiry;
+    private long accessTokenExpiry;
 
     @Value("${refresh.token.secret.key}")
     private String refreshTokenSecretKey;
 
     @Value("${refresh.token.expiry}")
-    private String refreshTokenExpiry;
+    private long refreshTokenExpiry;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public SecretKey getAccessTokenSecretKey() {
         return Keys.hmacShaKeyFor(accessTokenSecretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public SecretKey getRefreshTokenSecretKey() {
-        return  Keys.hmacShaKeyFor(refreshTokenSecretKey.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(refreshTokenSecretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(User user, TokenType tokenType){
 
         CustomClaimDto customClaimDto = new CustomClaimDto();
-        customClaimDto.setUsername(user.getUsername());
-        customClaimDto.setIsAccountNonLocked(user.isAccountNonLocked());
+        customClaimDto.setUsername(user.getEmail());
+        customClaimDto.setIsAccountNonLocked(user.getIsAccountNonLocked());
         customClaimDto.setCreatedAt(user.getCreatedAt());
         customClaimDto.setName(user.getName());
         customClaimDto.setUpdatedAt(user.getUpdatedAt());
@@ -56,16 +56,16 @@ public class JwtService {
 
         Map<String, Object> userClaim = objectMapper.convertValue(customClaimDto, Map.class);
 
-        String expiry =
+        long expiry =
                 tokenType.equals(TokenType.ACCESS_TOKEN) ? accessTokenExpiry : refreshTokenExpiry;
         SecretKey secretKey =
                 tokenType.equals(TokenType.ACCESS_TOKEN) ? getAccessTokenSecretKey() : getRefreshTokenSecretKey();
 
         return Jwts
                 .builder()
-                .subject(user.getUsername())
+                .subject(user.getEmail())
                 .signWith(secretKey)
-                .claim("userClaim", userClaim)
+                .claim("userClaim", tokenType.equals(TokenType.ACCESS_TOKEN) ? userClaim : null)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + expiry))
                 .compact();

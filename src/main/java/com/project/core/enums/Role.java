@@ -1,4 +1,4 @@
-package com.project.security.enums;
+package com.project.core.enums;
 
 public enum Role {
     BASIC_USER,

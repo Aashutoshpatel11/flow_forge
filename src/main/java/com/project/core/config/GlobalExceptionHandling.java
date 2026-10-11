@@ -1,4 +1,4 @@
-package com.project.security.config;
+package com.project.core.config;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

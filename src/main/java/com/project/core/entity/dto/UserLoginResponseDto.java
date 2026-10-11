@@ -1,4 +1,4 @@
-package com.project.security.entity.dto;
+package com.project.core.entity.dto;
 
 import lombok.Getter;
 import lombok.Setter;

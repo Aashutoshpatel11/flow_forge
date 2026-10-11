@@ -1,4 +1,4 @@
-package com.project.security.entity.model;
+package com.project.core.entity.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -15,14 +15,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-@Entity(name = "users")
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class User implements UserDetails {
+@Table(name = "users")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -42,10 +44,11 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     private Boolean isAccountNonLocked = true;
 
+    @Column(columnDefinition = "TEXT")
     private String refreshToken;
 
     @CreationTimestamp
@@ -55,23 +58,9 @@ public class User implements UserDetails {
     private LocalDateTime updatedAt;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
-    }
-
-    @Override
-    public @Nullable String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return isAccountNonLocked;
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 }
+
+

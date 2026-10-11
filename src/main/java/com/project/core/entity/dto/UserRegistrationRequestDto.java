@@ -1,4 +1,4 @@
-package com.project.security.entity.dto;
+package com.project.core.entity.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
