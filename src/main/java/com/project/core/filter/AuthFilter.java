@@ -16,7 +16,10 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tools.jackson.databind.ObjectMapper;
@@ -89,11 +92,13 @@ public class AuthFilter extends OncePerRequestFilter {
 
         CustomClaimDto userClaims = objectMapper.convertValue(claims.get("userClaim"), CustomClaimDto.class);
 
-        new UsernamePasswordAuthenticationToken(
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
                 userClaims.getUsername(),
                 null,
                 userClaims.getRoles().stream().map(SimpleGrantedAuthority::new).toList()
         );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }
