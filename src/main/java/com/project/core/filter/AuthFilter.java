@@ -6,6 +6,7 @@ import com.project.core.enums.TokenType;
 import com.project.core.repository.UserRepository;
 import com.project.core.service.JwtService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -43,15 +44,15 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        Cookie[] cookie = request.getCookies();
+        Cookie[] cookies = request.getCookies();
 
-        if( cookie==null || cookie.length ==0 ){
+        if( cookies==null || cookies.length ==0 ){
             filterChain.doFilter(request, response);
             return;
         }
 
         String accessToken = "";
-        for (Cookie value : cookie) {
+        for (Cookie value : cookies) {
             if (value.getName().equals("access-token")) {
                 accessToken = value.getValue();
             }
@@ -61,24 +62,27 @@ public class AuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        Claims claims = null;
+        try {
+            claims = jwtService.parseFromToken(accessToken, TokenType.ACCESS_TOKEN);
+        }catch (ExpiredJwtException e){
 
-        Claims claims = jwtService.parseFromToken(accessToken, TokenType.ACCESS_TOKEN);
+            User user  = userRepository.getUserByEmail(e.getClaims().getSubject());
 
-        if(claims.isEmpty() ) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+            Claims refreshTokenClaims = null;
 
-        if( claims.getExpiration().before(new Date(System.currentTimeMillis())) ){
-            User user  = userRepository.getUserByEmail(claims.getSubject());
-            Claims refreshTokenClaims = jwtService.parseFromToken(user.getRefreshToken(), TokenType.REFRESH_TOKEN);
-
-            if( refreshTokenClaims.isEmpty() || refreshTokenClaims.getExpiration().before(new Date(System.currentTimeMillis())) ){
+            try {
+                refreshTokenClaims =
+                        jwtService.parseFromToken(user.getRefreshToken(), TokenType.REFRESH_TOKEN);
+            }catch (ExpiredJwtException ex ){
                 filterChain.doFilter(request, response);
                 return;
             }
 
             String newAccessToken = jwtService.generateToken(user, TokenType.ACCESS_TOKEN);
+
+            user.setRefreshToken(jwtService.generateToken(user, TokenType.REFRESH_TOKEN));
+            userRepository.save(user);
 
             ResponseCookie responseCookie = ResponseCookie.from("access-token", newAccessToken)
                     .httpOnly(true)
@@ -88,6 +92,14 @@ public class AuthFilter extends OncePerRequestFilter {
                     .build();
             response.setHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
             claims = jwtService.parseFromToken(newAccessToken, TokenType.ACCESS_TOKEN);
+        } catch (Exception e) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if( claims==null || claims.isEmpty() ) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
         CustomClaimDto userClaims = objectMapper.convertValue(claims.get("userClaim"), CustomClaimDto.class);
@@ -99,7 +111,6 @@ public class AuthFilter extends OncePerRequestFilter {
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
         filterChain.doFilter(request, response);
     }
 }
