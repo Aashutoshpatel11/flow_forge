@@ -20,6 +20,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique = true)
     private String name;
 
     @CreationTimestamp
