@@ -2,6 +2,7 @@ package com.flowForge.config;
 
 import com.flowForge.entity.dto.ErrorResponseDto;
 import com.flowForge.enums.Status;
+import com.flowForge.exception.FlowForgeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -36,6 +37,12 @@ public class GlobalExceptionHandling {
                 .body( new ErrorResponseDto(Status.FAILURE, HttpStatus.BAD_REQUEST.toString() , e.getMessage()) );
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponseDto> flowForgeExceptionHandler(FlowForgeException e){
+        return  ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body( new ErrorResponseDto(Status.FAILURE, HttpStatus.BAD_REQUEST.toString() , e.getMessage()) );
+    }
 //    TODO
 //    IllegalArgumentException
 //    TODO

@@ -1,11 +1,13 @@
 package com.flowForge.controller;
 
+import com.flowForge.entity.dto.BaseResponseDto;
 import com.flowForge.entity.dto.jobDto.CreateJobRequestDto;
 import com.flowForge.entity.dto.jobDto.CreateJobResponseDto;
 import com.flowForge.entity.dto.jobDto.EmailJobDto;
 import com.flowForge.entity.model.EmailJob;
 import com.flowForge.entity.model.Job;
 import com.flowForge.enums.JobType;
+import com.flowForge.enums.Status;
 import com.flowForge.service.JobService;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -67,6 +69,13 @@ public class JobController {
     @GetMapping("/{uuid}")
     public ResponseEntity<Job> getJobById(@PathVariable String uuid){
         return ResponseEntity.ok().body( jobService.getJobById(UUID.fromString(uuid)) );
+    }
+
+    @PatchMapping("/cancel/{uuid}")
+    public ResponseEntity<BaseResponseDto> cancelJob(@PathVariable String uuid){
+        jobService.cancelJob(UUID.fromString(uuid));
+        return ResponseEntity.ok()
+                .body(new BaseResponseDto(Status.SUCCESS, "Job cancelled Successfully", ""));
     }
 
 }

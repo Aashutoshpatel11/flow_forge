@@ -109,4 +109,8 @@ public class AuthService {
         return userRepository.getUserByEmail(email);
     }
 
+    public String getCurrentUserPrincipal(){
+        return authentication.getPrincipal().toString();
+    }
+
 }
