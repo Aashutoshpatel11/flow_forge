@@ -14,25 +14,25 @@ public class EmailProcessingService {
     @KafkaListener(topics = "process-email-job", groupId = "process-email-job-group")
     public void consume(EmailJob job){
 
-        log.info("Starting email job processing");
+        System.out.println("Starting email job processing");
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        log.info("Processing Email JOB :: ");
+        System.out.println("Processing Email JOB :: ");
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        log.info(job.toString());
+        System.out.println(job.toString());
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        log.info("Email sent Successfully : " + job.getSendTo() );
+        System.out.println("Email sent Successfully : " + job.getSendTo() );
 
     }
 
