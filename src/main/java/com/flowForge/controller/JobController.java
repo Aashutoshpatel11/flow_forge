@@ -14,6 +14,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,31 +35,28 @@ public class JobController {
 
         switch (dto){
             case @Valid EmailJobDto emailJobDto -> {
-
                 Set<ConstraintViolation<EmailJobDto>> violations = validator.validate(emailJobDto);
-
-                if (!violations.isEmpty()) {
-                    throw new ConstraintViolationException(violations);
-                }
-
-                EmailJob job = new EmailJob();
-                job = new EmailJob();
-                job.setType(JobType.EMAIL);
-                job.setSendTo(emailJobDto.getSendTo());
-                job.setCc(emailJobDto.getCc());
-                job.setBcc(emailJobDto.getBcc());
-                job.setSubject(emailJobDto.getSubject());
-                job.setBody(emailJobDto.getBody());
-
-                return ResponseEntity
-                        .status(HttpStatus.OK)
-                        .body(jobService.createJob(job));
+                if (!violations.isEmpty()) { throw new ConstraintViolationException(violations); }
+                EmailJob job = createEmailJob(emailJobDto);
+                return ResponseEntity.status(HttpStatus.OK).body(jobService.createJob(job));
             }
             default -> {
                 throw new RuntimeException("Required Job is not Serviceable");
             }
         }
 
+    }
+
+    private static @NonNull EmailJob createEmailJob(EmailJobDto emailJobDto) {
+        EmailJob job = new EmailJob();
+        job = new EmailJob();
+        job.setType(JobType.EMAIL);
+        job.setSendTo(emailJobDto.getSendTo());
+        job.setCc(emailJobDto.getCc());
+        job.setBcc(emailJobDto.getBcc());
+        job.setSubject(emailJobDto.getSubject());
+        job.setBody(emailJobDto.getBody());
+        return job;
     }
 
     @GetMapping

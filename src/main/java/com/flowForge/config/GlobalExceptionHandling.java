@@ -43,8 +43,13 @@ public class GlobalExceptionHandling {
                 .status(HttpStatus.BAD_REQUEST)
                 .body( new ErrorResponseDto(Status.FAILURE, HttpStatus.BAD_REQUEST.toString() , e.getMessage()) );
     }
-//    TODO
-//    IllegalArgumentException
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponseDto> IllegalArgumentExceptionHandler(IllegalAccessException e){
+        return  ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body( new ErrorResponseDto(Status.FAILURE, HttpStatus.BAD_REQUEST.toString() , e.getMessage()) );
+    }
 //    TODO
 //    OptimisticLockingFailureException
 

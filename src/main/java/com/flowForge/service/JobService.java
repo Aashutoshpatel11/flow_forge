@@ -9,6 +9,9 @@ import com.flowForge.enums.Status;
 import com.flowForge.exception.FlowForgeException;
 import com.flowForge.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,28 +20,31 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class JobService {
+    private static final Logger log = LoggerFactory.getLogger(JobService.class);
     private final JobRepository jobRepository;
     private final AuthService authService;
+    private final KafkaTemplate<String, EmailJob> kafkaTemplate;
 
     public CreateJobResponseDto createJob(Job abstractJob){
-
-        EmailJob job = null;
-        if( abstractJob instanceof EmailJob emailJob){
-            job = (EmailJob) abstractJob;
-        }else{
-            throw new RuntimeException("Invalid Job");
-        }
-
-
         CreateJobResponseDto resp = new CreateJobResponseDto();
 
-        Job savedJob = null;
-        try {
-            User user = authService.getCurrentUser();
-            job.setUser(user);
-            savedJob = jobRepository.save(job);
-        } catch (Exception e) {
-            resp.getErrors().add(e.getMessage());
+        EmailJob job = null;
+        EmailJob savedJob = null;
+
+        if( abstractJob instanceof EmailJob emailJob){
+            job = (EmailJob) abstractJob;
+            try {
+                User user = authService.getCurrentUser();
+                job.setUser(user);
+                savedJob = jobRepository.save(job);
+                log.info("Posting Job to kafka");
+                kafkaTemplate.send("process-email-job", savedJob.getId().toString(), savedJob);
+                log.info("Posted Job to kafka");
+            } catch (Exception e) {
+                resp.getErrors().add(e.getMessage());
+            }
+        }else{
+            throw new RuntimeException("Invalid Job");
         }
 
         if (resp.getErrors().isEmpty() && savedJob != null) {
