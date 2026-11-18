@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f33d29af-ea6f-473e-8ad2-cd44fcd341a2" name="Changes" comment="Configured kafka for asynchronous job procressing">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/config/GlobalExceptionHandling.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/config/KafkaConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/JobController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/PingController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/RoleController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/authController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/BaseResponseDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/CustomClaimDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/ErrorResponseDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/RoleCreationRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/UserLoginRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/UserLoginResponseDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/UserRegistrationRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/jobDto/CreateJobRequestDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/jobDto/CreateJobResponseDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/jobDto/EmailJobDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/CustomUserDetails.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/EmailJob.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/Job.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/JobStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/JobType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/Status.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/TokenType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/exception/FlowForgeException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/filter/AuthFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/repository/JobRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/repository/RoleRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/AuthService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/CustomUserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/EmailProcessingService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/JobService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/RoleService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/project/legacy/LegacyApplicationTests.java" beforeDir="false" />
+    </list>
+    <list id="34df51e6-6dec-4fe9-9f07-132f9b394f86" name="ignore" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Aashutoshpatel11&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Aashutoshpatel11/flow_forge.git&quot;,
+    &quot;accountId&quot;: &quot;7e03704c-5880-4925-abaa-b46cdf9f67b9&quot;
+  }
+}</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1-sources.jar!/org/springframework/security/web/FilterChainProxy.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-web/7.0.9/spring-web-7.0.9-sources.jar!/org/springframework/web/filter/OncePerRequestFilter.java" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="Security Analysis" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="3KBxGyOwbGQZaloTUYFBkXardiY" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.App.executor": "Run",
+    "Spring Boot.LegacyApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "python.packages.toolwindow.project.migrated.to.right.top.v2": "true",
+    "settings.editor.selected.configurable": "preferences.keymap"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Programming\SPRING\flow_forge" />
+    </key>
+    <key name="ExtractSuperBase.RECENT_KEYS">
+      <recent name="com.project.core.filter" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="App" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
+      <module name="legacy" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.flowForge.App" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.flowForge.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10315.125" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10315.125" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f33d29af-ea6f-473e-8ad2-cd44fcd341a2" name="Changes" comment="" />
+      <created>1791044671429</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1791044671429</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="project initialization" />
+    <MESSAGE value="Add Jwt services, Spring security userDetails and userDetailsService custom impl ," />
+    <MESSAGE value="Add Jwt services, Spring security userDetails and userDetailsService custom impl" />
+    <MESSAGE value="Add Register and Login Routes" />
+    <MESSAGE value="Add Dual token authentication" />
+    <MESSAGE value="Add Dual token authentication - fixes" />
+    <MESSAGE value="Add global exception handling and Fixes dual token authentication" />
+    <MESSAGE value="Add logout functionality" />
+    <MESSAGE value="Add create and get job routes" />
+    <MESSAGE value="Add cancel route and user specific business validations" />
+    <MESSAGE value="Configured kafka for asynchronous job procressing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Configured kafka for asynchronous job procressing" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/flowForge/service/JobService.java</url>
+          <line>86</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
