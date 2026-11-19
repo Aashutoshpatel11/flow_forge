@@ -4,56 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f33d29af-ea6f-473e-8ad2-cd44fcd341a2" name="Changes" comment="Configured kafka for asynchronous job procressing">
-      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/App.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/config/GlobalExceptionHandling.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/config/KafkaConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/config/SecurityConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/JobController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/PingController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/RoleController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/controller/authController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/BaseResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/CustomClaimDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/ErrorResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/RoleCreationRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/UserLoginRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/UserLoginResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/UserRegistrationRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/jobDto/CreateJobRequestDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/jobDto/CreateJobResponseDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/dto/jobDto/EmailJobDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/CustomUserDetails.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/EmailJob.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/Job.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/entity/model/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/JobStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/JobType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/Role.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/Status.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/enums/TokenType.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/exception/FlowForgeException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/filter/AuthFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/repository/JobRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/repository/RoleRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/repository/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/AuthService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/CustomUserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/EmailProcessingService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/JobService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/JwtService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/flowForge/service/RoleService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/project/legacy/LegacyApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="f33d29af-ea6f-473e-8ad2-cd44fcd341a2" name="Changes" comment="Folder structure refactoring" />
     <list id="34df51e6-6dec-4fe9-9f07-132f9b394f86" name="ignore" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
     </list>
@@ -197,7 +148,8 @@
     <MESSAGE value="Add create and get job routes" />
     <MESSAGE value="Add cancel route and user specific business validations" />
     <MESSAGE value="Configured kafka for asynchronous job procressing" />
-    <option name="LAST_COMMIT_MESSAGE" value="Configured kafka for asynchronous job procressing" />
+    <MESSAGE value="Folder structure refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="Folder structure refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
