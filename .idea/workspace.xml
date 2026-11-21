@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f33d29af-ea6f-473e-8ad2-cd44fcd341a2" name="Changes" comment="Folder structure refactoring" />
-    <list id="34df51e6-6dec-4fe9-9f07-132f9b394f86" name="ignore" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
-    </list>
+    <list id="34df51e6-6dec-4fe9-9f07-132f9b394f86" name="ignore" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,8 +68,8 @@
     "Spring Boot.App.executor": "Run",
     "Spring Boot.LegacyApplication.executor": "Run",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Programming/SPRING/flow_forge",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.jshint": "true",
     "node.js.detected.package.tslint": "true",
