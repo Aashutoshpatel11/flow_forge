@@ -12,7 +12,9 @@ import org.hibernate.validator.constraints.pl.REGON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,10 +34,18 @@ public class EmailProcessingService {
     private final JobService jobService;
     private final EmailRenderer emailRenderer;
 
-
+    @RetryableTopic(
+            attempts = "3",
+            backOff = @BackOff(
+                    delay = 5000,
+                    multiplier = 3.0,
+                    maxDelay = 45000
+            ),
+            dltTopicSuffix = "-dlt"
+    )
     @KafkaListener(topics = "process-email-job", groupId = "process-email-job-group")
     public void consume(EmailJob job) throws InterruptedException {
-        log.info("Email processing started for job : " + job.getId());
+        log.info("Received email job: {}", job.getId());
 
         job = (EmailJob) jobService.getJobById(job.getId());
         if( job.getStatus().equals(JobStatus.FAILED)
@@ -49,16 +59,14 @@ public class EmailProcessingService {
         job.setAttemptCount(job.getAttemptCount()+1);
         job = ( EmailJob ) jobService.updateJob(job);
 
-        Thread.sleep(3000);
-
         sendMail(job);
     }
 
     public void sendMail( EmailJob currentJob ) throws InterruptedException {
 
         CreateEmailOptions params = CreateEmailOptions.builder()
-                .from("official@flow.forge.com")
-                .to(currentJob.getSendTo())
+                .from("onboarding@resend.dev")
+                .to("resend.dev")
                 .cc(currentJob.getCc())
                 .bcc(currentJob.getBcc())
                 .subject(currentJob.getSubject())
@@ -72,7 +80,11 @@ public class EmailProcessingService {
             currentJob.setResult(Status.SUCCESS);
             currentJob.setStatus(JobStatus.SUCCEEDED);
             currentJob = (EmailJob) jobService.updateJob(currentJob);
+
+            log.info("Email job completed successfully: {}", currentJob.getId());
         } catch (ResendException e) {
+
+            log.error("Email delivery failed for job {}: {}", currentJob.getId(), e.getMessage());
 
             currentJob.setResult(Status.FAILURE);
 
@@ -85,10 +97,10 @@ public class EmailProcessingService {
                 currentJob.setErrorMessage(e.getMessage());
                 jobService.updateJob(currentJob);
                 consume((EmailJob) jobService.updateJob(currentJob));
+
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 }
