@@ -61,7 +61,7 @@ public class JobController {
 
     @GetMapping
     public ResponseEntity<List<Job>> getALlJobs(){
-        return ResponseEntity.ok().body(jobService.fetchAllJobs());
+        return ResponseEntity.ok().body(jobService.fetchUserAllJobs());
     }
 
     @GetMapping("/{uuid}")

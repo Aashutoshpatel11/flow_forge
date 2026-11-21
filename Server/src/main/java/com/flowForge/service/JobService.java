@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,10 +37,9 @@ public class JobService {
             try {
                 User user = authService.getCurrentUser();
                 job.setUser(user);
-                savedJob = jobRepository.save(job);
-                log.info("Posting Job to kafka");
+                savedJob = (EmailJob) jobRepository.save(job);
+                log.info("Posting Job to kafka with ID : " + savedJob.getId());
                 kafkaTemplate.send("process-email-job", savedJob.getId().toString(), savedJob);
-                log.info("Posted Job to kafka");
             } catch (Exception e) {
                 resp.getErrors().add(e.getMessage());
             }
@@ -60,23 +60,19 @@ public class JobService {
         return resp;
     }
 
-    public List<Job> fetchAllJobs(){
+    public List<Job> fetchUserAllJobs(){
+
         try {
-            return jobRepository.findAll();
-        } catch (RuntimeException e) {
+            UUID userId = authService.getCurrentUser().getId();
+            return jobRepository.findByUserId(userId);
+        } catch (RuntimeException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
 
     public Job getJobById(UUID uuid){
         try {
-            Job job = jobRepository.getById(uuid);
-
-            if( !job.getUser().getEmail().equals(authService.getCurrentUserPrincipal()) ){
-                throw new FlowForgeException("User does not own the job with id : " + uuid.toString());
-            }
-
-            return job;
+            return jobRepository.getJobById(uuid);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }
@@ -86,7 +82,7 @@ public class JobService {
         try {
             Job job = getJobById(uuid);
 
-            if( !job.getUser().getEmail().equals(authService.getCurrentUserPrincipal()) ){
+            if( !job.getUser().getEmail().equals(authService.getCurrentUser().getEmail()) ){
                 throw new FlowForgeException("User does not own the job with id : " + uuid.toString());
             }
 
@@ -103,6 +99,17 @@ public class JobService {
             return true;
         } catch (RuntimeException e) {
             throw new RuntimeException("Error canceling job : " + e.getMessage());
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Job updateJob(Job job){
+        try {
+
+            return jobRepository.save(job);
+        }catch (Exception e){
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 

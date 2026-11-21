@@ -15,4 +15,13 @@ public interface JobRepository extends JpaRepository<Job, UUID> {
     @EntityGraph(attributePaths = {"user"})
     public List<Job> findAll();
 
+    @EntityGraph(attributePaths = {"user"})
+    public Job getJobById(UUID id);
+
+    @EntityGraph(attributePaths = {"user"})
+    public List<Job> findByUserId(UUID userId);
+
+    @Override
+    @EntityGraph(attributePaths = {"user"})
+    public Job save(Job job);
 }
