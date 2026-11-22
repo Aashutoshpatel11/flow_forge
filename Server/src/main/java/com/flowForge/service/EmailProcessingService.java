@@ -7,30 +7,32 @@ import com.flowForge.utils.EmailRenderer;
 import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.pl.REGON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.BackOff;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.RetryableTopic;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class EmailProcessingService {
 
     private static final Logger log = LoggerFactory.getLogger(EmailProcessingService.class);
-
-    @Value("${resend.mail.api.key}")
-    private static String resend_api_key;
-
-    private final Resend resend = new Resend(resend_api_key);
-
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+    private final JavaMailSender mailSender;
     private final JobService jobService;
     private final EmailRenderer emailRenderer;
 
@@ -59,48 +61,68 @@ public class EmailProcessingService {
         job.setAttemptCount(job.getAttemptCount()+1);
         job = ( EmailJob ) jobService.updateJob(job);
 
-        sendMail(job);
-    }
+        try{
+            sendMail(job);
+            job.setCompletedAt(LocalDateTime.now());
+            job.setResult(Status.SUCCESS);
+            job.setStatus(JobStatus.SUCCEEDED);
+            job = (EmailJob) jobService.updateJob(job);
 
-    public void sendMail( EmailJob currentJob ) throws InterruptedException {
+            log.info("Email job completed successfully: {}", job.getId());
+        } catch (MessagingException e) {
+            log.error("Email delivery failed for job {}: {}", job.getId(), e.getMessage());
+            job.setResult(Status.FAILURE);
 
-        CreateEmailOptions params = CreateEmailOptions.builder()
-                .from("onboarding@resend.dev")
-                .to("resend.dev")
-                .cc(currentJob.getCc())
-                .bcc(currentJob.getBcc())
-                .subject(currentJob.getSubject())
-                .html(emailRenderer.renderWrapper(currentJob.getSubject(), currentJob.getBody()))
-                .build();
-
-        try {
-            resend.emails().send(params);
-
-            currentJob.setCompletedAt(LocalDateTime.now());
-            currentJob.setResult(Status.SUCCESS);
-            currentJob.setStatus(JobStatus.SUCCEEDED);
-            currentJob = (EmailJob) jobService.updateJob(currentJob);
-
-            log.info("Email job completed successfully: {}", currentJob.getId());
-        } catch (ResendException e) {
-
-            log.error("Email delivery failed for job {}: {}", currentJob.getId(), e.getMessage());
-
-            currentJob.setResult(Status.FAILURE);
-
-            if( currentJob.getAttemptCount() >= currentJob.getMaxCount() ){
-                currentJob.setStatus(JobStatus.FAILED);
-                currentJob.setErrorMessage("max attempt reached, Failure :  " + e.getMessage());
-                jobService.updateJob(currentJob);
-            }else{
-                currentJob.setStatus(JobStatus.RETRYING);
-                currentJob.setErrorMessage(e.getMessage());
-                jobService.updateJob(currentJob);
-                consume((EmailJob) jobService.updateJob(currentJob));
-
+            if (job.getAttemptCount() >= job.getMaxCount()) {
+                job.setStatus(JobStatus.FAILED);
+                job.setErrorMessage("Max attempts reached: " + e.getMessage());
+                jobService.updateJob(job);
+            } else {
+                job.setStatus(JobStatus.RETRYING);
+                job.setErrorMessage(e.getMessage());
+                jobService.updateJob(job);
+                throw new RuntimeException("Triggering Kafka retry", e);
             }
-        } catch (Exception e) {
+        }   catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+//    public void sendMail( EmailJob currentJob ) throws ResendException {
+//
+//        CreateEmailOptions params = CreateEmailOptions.builder()
+//                .from("onboarding@resend.dev")
+//                .to("resend.dev")
+//                .cc(currentJob.getCc())
+//                .bcc(currentJob.getBcc())
+//                .subject(currentJob.getSubject())
+//                .html(emailRenderer.renderWrapper(currentJob.getSubject(), currentJob.getBody()))
+//                .build();
+//
+//        resend.emails().send(params);
+//
+//    }
+
+    public void sendMail( EmailJob currentJob ) throws MessagingException  {
+
+        MimeMessage message = mailSender.createMimeMessage();
+
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+        helper.setFrom(fromEmail);
+        helper.setTo(currentJob.getSendTo().toArray(new String[0]));
+
+        if (currentJob.getCc() != null && !currentJob.getCc().isEmpty()) {
+            helper.setCc(currentJob.getCc().toArray(new String[0]));
+        }
+        if (currentJob.getBcc() != null && !currentJob.getBcc().isEmpty()) {
+            helper.setBcc(currentJob.getBcc().toArray(new String[0]));
+        }
+
+        helper.setSubject(currentJob.getSubject());
+        helper.setText(emailRenderer.renderWrapper(currentJob.getSubject(), currentJob.getBody()), true);
+
+        mailSender.send(message);
+
     }
 }
