@@ -10,7 +10,7 @@ const STATUS_BADGE_MAP = {
     RUNNING: "badge-info",
     IN_PROGRESS: "badge-info",
     COMPLETED: "badge-success",
-    SUCCESS: "badge-success",
+    SUCCEEDED: "badge-success",
     FAILED: "badge-error",
     CANCELLED: "badge-ghost",
     DEAD_LETTER: "badge-error badge-outline",

@@ -46,7 +46,14 @@ export function useJobPolling(jobId, { intervalMs = 9000, onUpdate } = {}) {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to fetch job (HTTP ${response.status})`);
+                let errorMessage = `Failed to fetch job (HTTP ${response.status})`;
+
+                let resp = await response.json();
+
+                if( Array.isArray(resp.errors) && resp.errors.length > 0 ){
+                    errorMessage += `${resp.errors.join(', ')}`
+                }
+                throw new Error(errorMessage);
             }
 
             const data = await response.json();
